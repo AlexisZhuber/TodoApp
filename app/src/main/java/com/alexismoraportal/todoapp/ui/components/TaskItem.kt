@@ -11,18 +11,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.alexismoraportal.todoapp.model.Task
+import com.alexismoraportal.todoapp.domain.TaskEntity
 import com.alexismoraportal.todoapp.ui.theme.Primary
 import com.alexismoraportal.todoapp.ui.theme.delete
+import androidx.compose.material.icons.filled.*
+import com.alexismoraportal.todoapp.utils.iconOptions
 
 /**
  * TaskItem renders a single task card.
  *
  * It displays:
- * - The task icon.
+ * - The task icon (retrieved from a predefined icon list using the stored icon index).
  * - The task title (name) and its description.
  * - The creation and scheduled date/times.
  * - A delete icon that opens a confirmation dialog.
@@ -37,7 +40,7 @@ import com.alexismoraportal.todoapp.ui.theme.delete
  */
 @Composable
 fun TaskItem(
-    task: Task,
+    task: TaskEntity,
     modifier: Modifier = Modifier,
     elevation: Dp = 4.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
@@ -46,6 +49,9 @@ fun TaskItem(
 ) {
     // Local state to control the visibility of the delete confirmation dialog.
     var showDeleteDialog by remember { mutableStateOf(false) }
+
+    // Retrieve the icon based on the stored icon index.
+    val taskIcon: ImageVector = iconOptions.getOrElse(task.iconIndex) { Icons.Filled.Android }
 
     // Main card container displaying the task.
     Card(
@@ -69,9 +75,9 @@ fun TaskItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Task icon.
+                // Display the task icon.
                 Icon(
-                    imageVector = task.icon,
+                    imageVector = taskIcon,
                     contentDescription = "Task icon",
                     modifier = Modifier.size(28.dp),
                     tint = Color.Black

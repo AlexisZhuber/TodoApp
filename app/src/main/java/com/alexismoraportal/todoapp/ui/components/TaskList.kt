@@ -3,7 +3,7 @@ package com.alexismoraportal.todoapp.ui.components
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import com.alexismoraportal.todoapp.model.Task
+import com.alexismoraportal.todoapp.domain.TaskEntity
 
 /**
  * TaskList.kt
@@ -14,9 +14,9 @@ import com.alexismoraportal.todoapp.model.Task
  */
 @Composable
 fun TaskList(
-    tasks: List<Task>,
-    onTaskClick: (Task) -> Unit,
-    onTaskDelete: (Task) -> Unit
+    tasks: List<TaskEntity>,
+    onTaskClick: (TaskEntity) -> Unit,
+    onTaskDelete: (TaskEntity) -> Unit
 ) {
     LazyColumn{
         items(tasks) { task ->

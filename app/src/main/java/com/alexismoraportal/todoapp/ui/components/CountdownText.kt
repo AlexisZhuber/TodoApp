@@ -7,8 +7,8 @@ import androidx.compose.ui.text.TextStyle
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.LocalDateTime
-import com.alexismoraportal.todoapp.util.parseDateTime
-import com.alexismoraportal.todoapp.util.daysHoursMinsSecs
+import com.alexismoraportal.todoapp.utils.parseDateTime
+import com.alexismoraportal.todoapp.utils.daysHoursMinsSecs
 import com.alexismoraportal.todoapp.ui.theme.Primary
 
 /**

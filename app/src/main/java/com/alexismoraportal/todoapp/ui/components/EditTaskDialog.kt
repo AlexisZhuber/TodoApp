@@ -20,42 +20,55 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.alexismoraportal.todoapp.model.Task
-import com.alexismoraportal.todoapp.util.parseDateTime
+import com.alexismoraportal.todoapp.domain.TaskEntity
+import com.alexismoraportal.todoapp.utils.parseDateTime
 import com.alexismoraportal.todoapp.ui.theme.Primary
 import com.alexismoraportal.todoapp.ui.theme.Secondary
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import com.alexismoraportal.todoapp.ui.components.DatePickerDialog
-import com.alexismoraportal.todoapp.ui.components.TimePickerDialog
 
 /**
  * EditTaskDialog
  *
- * A composable dialog for editing an existing Task. This dialog includes separate fields for:
+ * A composable dialog for editing an existing TaskEntity.
+ * This dialog includes fields for:
  * - Editing the unique task name (must be alphanumeric and no more than 20 characters)
  * - Editing the task description
  * - Updating the scheduled date/time using external date and time pickers
  * - Icon selection from a list of provided options.
+ *
+ * The task's icon is represented by an index referring to the icon options list.
+ *
+ * @param showDialog Boolean flag to control dialog visibility.
+ * @param task The TaskEntity object to be edited.
+ * @param iconOptions List of available icon options.
+ * @param onConfirm Lambda invoked with the updated TaskEntity when the user confirms.
+ * @param onDismiss Lambda invoked when the dialog is dismissed.
  */
 @Composable
 fun EditTaskDialog(
     showDialog: Boolean,
-    task: Task?,
+    task: TaskEntity,
     iconOptions: List<ImageVector>,
-    onConfirm: (Task) -> Unit,
+    onConfirm: (TaskEntity) -> Unit,
     onDismiss: () -> Unit
 ) {
-    if (!showDialog || task == null) return
+    // Obtain the current context for displaying Toast messages.
+    val context = LocalContext.current
 
-    // Local states for editing task name, description, and icon.
+    // Exit early if dialog should not be shown.
+    if (!showDialog) return
+
+    // Local state for editing task name and description.
     var editedName by remember { mutableStateOf(task.name) }
     var editedDescription by remember { mutableStateOf(task.description) }
-    var editedIcon by remember { mutableStateOf(task.icon) }
+
+    // Local state for selected icon index (initialize from task.iconIndex).
+    var editedIconIndex by remember { mutableStateOf(task.iconIndex) }
 
     // Parse the original scheduled date/time string.
     var editedDateTime by remember { mutableStateOf(parseDateTime(task.scheduledDateTime)) }
@@ -93,7 +106,6 @@ fun EditTaskDialog(
                         unfocusedLabelColor = Color.LightGray
                     )
                 )
-
                 Spacer(modifier = Modifier.height(8.dp))
                 // Outlined text field for editing the task description.
                 OutlinedTextField(
@@ -162,13 +174,13 @@ fun EditTaskDialog(
                 )
                 // Horizontal scrollable row for icon options.
                 Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-                    iconOptions.forEach { icon ->
-                        IconButton(onClick = { editedIcon = icon }) {
+                    iconOptions.forEachIndexed { index, icon ->
+                        IconButton(onClick = { editedIconIndex = index }) {
                             Icon(
                                 modifier = Modifier.size(32.dp),
                                 imageVector = icon,
                                 contentDescription = "Icon",
-                                tint = if (editedIcon == icon) Primary else Secondary
+                                tint = if (editedIconIndex == index) Primary else Secondary
                             )
                         }
                     }
@@ -180,24 +192,24 @@ fun EditTaskDialog(
                 onClick = {
                     // Validate that the task name is not blank.
                     if (editedName.isBlank()) {
-                        Toast.makeText(null, "Task name cannot be empty", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Task name cannot be empty", Toast.LENGTH_SHORT).show()
                         return@TextButton
                     }
                     // Validate that the task name is alphanumeric.
                     if (!editedName.matches(Regex("^[a-zA-Z0-9 ]+\$"))) {
-                        Toast.makeText(null, "Task name must be alphanumeric", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Task name must be alphanumeric", Toast.LENGTH_SHORT).show()
                         return@TextButton
                     }
                     // Validate that the task name does not exceed 20 characters.
                     if (editedName.length > 20) {
-                        Toast.makeText(null, "Task name must not exceed 20 characters", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Task name must not exceed 20 characters", Toast.LENGTH_SHORT).show()
                         return@TextButton
                     }
-                    // Build the updated Task with the edited fields.
+                    // Build the updated TaskEntity with the edited fields.
                     val updatedTask = task.copy(
                         name = editedName,
                         description = editedDescription,
-                        icon = editedIcon,
+                        iconIndex = editedIconIndex,
                         scheduledDateTime = editedDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                     )
                     onConfirm(updatedTask)
@@ -221,24 +233,21 @@ fun EditTaskDialog(
         }
     )
 
-    // --------------------------------------------------------------------
-    // Date and Time picker dialogs reused from your DateTimePickers.kt file.
-    // --------------------------------------------------------------------
+    // DatePickerDialog: Combines the selected date with the current time.
     DatePickerDialog(
         dateDialogState = dateDialogState,
         initialDate = editedDateTime.toLocalDate(),
         onDateSelected = { date ->
-            // Combine the selected date with the existing time.
             val newDateTime = LocalDateTime.of(date, editedDateTime.toLocalTime())
             editedDateTime = if (newDateTime >= LocalDateTime.now()) newDateTime else LocalDateTime.now()
             dateDialogState.hide()
         }
     )
 
+    // TimePickerDialog: Combines the selected time with the current date.
     TimePickerDialog(
         timeDialogState = timeDialogState,
         onTimeSelected = { time ->
-            // Combine the selected time with the existing date.
             val newDateTime = LocalDateTime.of(editedDateTime.toLocalDate(), time)
             editedDateTime = if (newDateTime >= LocalDateTime.now()) newDateTime else LocalDateTime.now()
             timeDialogState.hide()

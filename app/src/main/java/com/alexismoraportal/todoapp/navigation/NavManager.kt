@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.alexismoraportal.todoapp.ui.screens.NotificationScreen
+import com.alexismoraportal.todoapp.ui.screens.SplashScreen
 import com.alexismoraportal.todoapp.ui.screens.TasksScreen
 
 /**
@@ -19,7 +20,17 @@ fun NavManager(){
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = Screens.HomeScreen.name){
+    NavHost(navController = navController, startDestination = Screens.SplashScreen.name){
+
+        composable(route = Screens.SplashScreen.name) {
+            SplashScreen {
+                navController.navigate(Screens.HomeScreen.name) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+        }
+
+
         composable (
             route = Screens.HomeScreen.name,
             enterTransition = {

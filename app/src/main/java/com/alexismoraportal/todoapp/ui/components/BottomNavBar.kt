@@ -81,14 +81,8 @@ fun BottomBarMenu(
                     tint = Color.White
                 )
             }
-            // Icon button for notifications.
-            IconButton(onClick = onNotificationsClick) {
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = Color.White
-                )
-            }
+
+            NotificationsIcon(onNotificationsClick = onNotificationsClick)
         }
 
         // The FloatingActionButton placed in the center top, offset upward.

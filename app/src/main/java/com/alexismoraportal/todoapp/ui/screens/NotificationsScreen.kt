@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.alexismoraportal.todoapp.navigation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -56,7 +57,9 @@ fun NotificationScreen(navController: NavController){
                         modifier = Modifier
                             .clickable(enabled = !isClicked) {
                                 isClicked = true
-                                navController.popBackStack()
+                                navController.navigate(Screens.HomeScreen.name) {
+                                    popUpTo(0) { inclusive = true }
+                                }
                                 // Reset isClicked after 500 milliseconds
                                 scope.launch {
                                     delay(500)

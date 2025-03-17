@@ -1,4 +1,4 @@
-package com.alexismoraportal.todoapp.util
+package com.alexismoraportal.todoapp.utils
 
 import java.time.Duration
 import java.time.LocalDateTime

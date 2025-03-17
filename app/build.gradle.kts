@@ -73,4 +73,23 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
+    // Room runtime and Kotlin extensions (for coroutine support)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    // Annotation processor for Room (if using Kotlin, use kapt)
+    kapt(libs.androidx.room.compiler)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Hilt navigation compose
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
+    // Lottie
+    implementation(libs.lottie)
+    implementation(libs.lottie.compose)
 }

@@ -23,11 +23,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.alexismoraportal.todoapp.model.Task
+import com.alexismoraportal.todoapp.domain.TaskEntity
 import com.alexismoraportal.todoapp.ui.theme.Primary
 import com.alexismoraportal.todoapp.ui.theme.Secondary
-import com.alexismoraportal.todoapp.ui.components.DatePickerDialog
-import com.alexismoraportal.todoapp.ui.components.TimePickerDialog
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -44,12 +42,14 @@ import java.time.format.DateTimeFormatter
  * - Icon selection from a list of provided options.
  *
  * The "Save" button is enabled only when all fields are complete.
+ *
+ * Note: The new TaskEntity uses iconIndex (an Int) to represent the chosen icon.
  */
 @Composable
 fun AddTaskDialog(
     showDialog: Boolean,
     iconOptions: List<ImageVector>,
-    onConfirm: (Task) -> Unit,
+    onConfirm: (TaskEntity) -> Unit,
     onDismiss: () -> Unit
 ) {
     if (!showDialog) return
@@ -201,11 +201,11 @@ fun AddTaskDialog(
                         return@TextButton
                     }
 
-                    // Build the new Task with the current values.
-                    val newTask = Task(
+                    // Build the new TaskEntity using the selected icon's index.
+                    val newTask = TaskEntity(
                         name = taskName,
                         description = taskDescription,
-                        icon = selectedIcon!!,
+                        iconIndex = iconOptions.indexOf(selectedIcon!!),
                         createdDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                         scheduledDateTime = selectedDateTime!!.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                     )

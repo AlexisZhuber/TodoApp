@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TodoApp" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.TodoApp.NewTheme" parent="Theme.TodoApp">
+        <item name="android:windowSplashScreenBackground">#FFF</item>
+        <item name="android:windowSplashScreenAnimationDuration">100</item>
+    </style>
+</resources>

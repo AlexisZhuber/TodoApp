@@ -11,15 +11,9 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 // Primary: Midnight Blue – a deep, refined blue
-val Primary = Color(0xFF002244)
+val Primary = Color(0xFF4F6D7A)
 // Secondary: Charcoal – a serious, dark grey
-val Secondary = Color(0xFF333333)
-// Tertiary: Steel Blue – a muted, professional blue shade
-val Tertiary = Color(0xFF4A6572)
-// Quaternary: Dark Slate – an elegant, subdued blue-grey
-val Quaternary = Color(0xFF3B4F61)
-// Quinary: Graphite – a refined, medium-dark grey
-val Quinary = Color(0xFF555555)
-// Senary: Deep Teal – adds a touch of color while remaining serious
-val Senary = Color(0xFF004D40)
+val Secondary = Color(0xFFC0D6DF)
+// delete
+val delete = Color(0xFFA30404)
 

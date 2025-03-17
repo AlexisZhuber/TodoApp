@@ -70,4 +70,7 @@ dependencies {
     // Calendar
     implementation(libs.datetime)
 
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
 }

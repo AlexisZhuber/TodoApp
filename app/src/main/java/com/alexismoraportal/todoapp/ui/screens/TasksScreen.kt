@@ -30,7 +30,9 @@ import com.alexismoraportal.todoapp.ui.components.EditTaskDialog
 import com.alexismoraportal.todoapp.ui.components.SearchBar
 import com.alexismoraportal.todoapp.ui.components.TaskList
 import com.alexismoraportal.todoapp.utils.iconOptions
+import com.alexismoraportal.todoapp.utils.parseDateTime
 import com.alexismoraportal.todoapp.viewmodel.TasksViewModel
+import java.time.LocalDateTime
 
 /**
  * TasksScreen displays the list of tasks and manages dialogs for adding and editing tasks.
@@ -59,7 +61,12 @@ fun TasksScreen(navController: NavController, viewModel: TasksViewModel = hiltVi
             BottomBarMenu(
                 onAddClick = { viewModel.updateShowAddDialog(true) },
                 onSearchClick = { viewModel.toggleSearchBar() },
-                onNotificationsClick = { navController.navigate(Screens.NotificationScreen.name) }
+                onNotificationsClick = { navController.navigate(Screens.NotificationScreen.name) },
+                notificationBadgeCount = viewModel.tasks.count { task ->
+                    val scheduledTime = parseDateTime(task.scheduledDateTime)
+                    scheduledTime.isAfter(LocalDateTime.now()) &&
+                            scheduledTime.isBefore(LocalDateTime.now().plusHours(1))
+                }
             )
         }
     ) { paddingValues ->
